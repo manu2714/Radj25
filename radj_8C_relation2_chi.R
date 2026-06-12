@@ -43,47 +43,44 @@ zsignc<-function(x){
 # Matrices with 8 states 
 
 
+# Matrix A significant cells [A,B] and [B,A]
 
-# Matrix A significant cells [B,E] and [D,C]
 
-
-m82A <- matrix(c(1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
-                 1/28, 1/28, 1/28,1/28,6/8, 1/28, 1/28,1/28,
+m82A <- matrix(c(1/28, 6/8, 1/28,1/28,1/28, 1/28, 1/28,1/28,
+                 6/8, 1/28, 1/28,1/28,1/28, 1/28, 1/28,1/28,
                  1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
-                 1/28, 1/28, 6/8,1/28,1/28, 1/28, 1/28,1/28,
+                 1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
                  1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
                  1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
                  1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
                  1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8), 
                8, 8, byrow = T)
 
-# Matrix B with p = 6/8, 4 cells significant: [B,E], [D,C], [C,A] and[F,D] 
+# Matrix B with p = 6/8, 4 cells significant: [A,B] [B,A] [C,D] [D,C] 
 
 
-m82B <- matrix(c(1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8, 
-                 1/28, 1/28, 1/28,1/28,6/8, 1/28, 1/28,1/28,
-                 6/8, 1/28, 1/28, 1/28,1/28, 1/28, 1/28,1/28,
-                 1/28, 1/28, 6/8, 1/28,1/28, 1/28, 1/28,1/28,
-                 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8,
+m82B <- matrix(c(1/28, 6/8, 1/28,1/28,1/28, 1/28, 1/28,1/28,
+                 6/8,1/28,1/28,1/28, 1/28, 1/28,1/28,1/28,
                  1/28, 1/28, 1/28,6/8,1/28, 1/28, 1/28,1/28,
-                 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8,
-                 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8, 1/8),
+                 1/28, 1/28, 6/8,1/28, 1/28, 1/28,1/28,1/28,
+                 1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
+                 1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
+                 1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
+                 1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8), 
                8, 8, byrow = T)
 
 
-# Matrix C with p = 6/8, 6 cells significant: [B,E], [D,C], [C,A] [F,D] [E,H] [G,B]
+# Matrix C with p = 6/8, 6 cells significant: [A,B] [B,A] [C,D] [D,C] [E,F] [F,E]
 
-m82C <-  matrix(c(1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8, 
-                  1/28, 1/28, 1/28,1/28,6/8, 1/28, 1/28,1/28,
-                  6/8, 1/28, 1/28,1/28,1/28, 1/28, 1/28,1/28,
-                  1/28, 1/28, 6/8,1/28,1/28, 1/28, 1/28,1/28,
-                  1/28, 1/28, 1/28,1/28,1/28, 1/28, 1/28,6/8,
+m82C <-  matrix(c(1/28, 6/8, 1/28,1/28,1/28, 1/28, 1/28,1/28,
+                  6/8,1/28,1/28,1/28, 1/28, 1/28,1/28,1/28,
                   1/28, 1/28, 1/28,6/8,1/28, 1/28, 1/28,1/28,
-                  1/28, 6/8, 1/28,1/28,1/28, 1/28, 1/28,1/28,
+                  1/28, 1/28, 6/8,1/28, 1/28, 1/28,1/28,1/28,
+                  1/28, 1/28, 1/28,1/28,1/28, 6/8, 1/28,1/28,
+                  1/28, 1/28, 1/28,1/28,6/8, 1/28, 1/28,1/28,
+                  1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
                   1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8), 
                 8, 8, byrow = T)
-
-
 
 # Condition with 8 states
 
@@ -91,27 +88,27 @@ m82C <-  matrix(c(1/8, 1/8, 1/8,1/8,1/8, 1/8, 1/8,1/8,
 ## Matrix 2A
 
 
-seq82A100 <- genMarkov(n = 12000, transMat = m82A, 
+seq82A100 <- genMarkov(n = 15000, transMat = m82A, 
                      chainLen = 100, wide = TRUE)
-seq82B100 <- genMarkov(n = 12000, transMat = m82B, 
+seq82B100 <- genMarkov(n = 15000, transMat = m82B, 
                      chainLen = 100, wide = TRUE)
-seq82C100 <- genMarkov(n = 12000, transMat = m82C, 
+seq82C100 <- genMarkov(n = 15000, transMat = m82C, 
                      chainLen = 100, wide = TRUE)
 
 
-seq82A150 <- genMarkov(n = 12000, transMat = m82A, 
+seq82A150 <- genMarkov(n = 15000, transMat = m82A, 
                      chainLen = 150, wide = TRUE)
-seq82B150 <- genMarkov(n = 12000, transMat = m82B, 
+seq82B150 <- genMarkov(n = 16000, transMat = m82B, 
                      chainLen = 150, wide = TRUE)
-seq82C150 <- genMarkov(n = 12000, transMat = m82C, 
+seq82C150 <- genMarkov(n = 15000, transMat = m82C, 
                      chainLen = 150, wide = TRUE)
 
 
-seq82A200 <- genMarkov(n = 12000, transMat = m82A, 
+seq82A200 <- genMarkov(n = 15000, transMat = m82A, 
                       chainLen = 200, wide = TRUE)
-seq82B200 <- genMarkov(n = 12000, transMat = m82B, 
+seq82B200 <- genMarkov(n = 15000, transMat = m82B, 
                       chainLen = 200, wide = TRUE)
-seq82C200 <- genMarkov(n = 12000, transMat = m82C, 
+seq82C200 <- genMarkov(n = 15000, transMat = m82C, 
                       chainLen = 200, wide = TRUE)
 
 
@@ -163,12 +160,9 @@ dim8<- ldply(resid82A100,dim)
 falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
 length(falsos)
 
-
+resid82A100 <- resid82A100[-falsos]
 resid82A100v<- ldply(resid82A100,as.vector)
-
-
 buenos<- complete.cases(resid82A100v)
-length(buenos)
 resid82A100v<- resid82A100v[buenos,]
 resid82A100v<- resid82A100v[1:5000,]
 
@@ -291,22 +285,27 @@ length(buenos)
 transiz82A150<- transiz82A150[buenos]
 resid82A150<- llply(transiz82A150, function(x) chisq.test(x)$stdres)
 
+#resid82A100 <- resid82A100[-falsos]
+resid82A100v<- ldply(resid82A100,as.vector)
+buenos<- complete.cases(resid82A100v)
+resid82A100v<- resid82A100v[buenos,]
+resid82A100v<- resid82A100v[1:5000,]
+
+
+#resid82A100 <- resid82A100[-falsos]
+resid82A100v<- ldply(resid82A100,as.vector)
+buenos<- complete.cases(resid82A100v)
+resid82A100v<- resid82A100v[buenos,]
+resid82A100v<- resid82A100v[1:5000,]
+
+resid82A150<- llply(transiz82A150, function(x) chisq.test(x)$stdres)
+
 dim8<- ldply(resid82A150,dim)
-falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
+falsos<-which(dim8$V1 != 8 | dim8$V2 !=8)
 length(falsos)
 
-#resid82A150 <- resid82A150[-falsos]
-resid82A150v<- ldply(resid82A100,as.vector)
-buenos<- complete.cases(resid82A100v)
-length(buenos)
-resid82A150v<- resid82A100v[buenos,]
-resid82A150v<- resid82A100v[1:5000,]
-
-
-#resid82A150 <- resid82A150[-falsos]
-resid82A150v<- ldply(resid82A150,as.vector)
+resid82A150v<- ldply(resid82A150[-falsos],as.vector)
 buenos<- complete.cases(resid82A150v)
-length(buenos)
 resid82A150v<- resid82A150v[buenos,]
 resid82A150v<- resid82A150v[1:5000,]
 
@@ -694,13 +693,17 @@ dim8<- ldply(resid82B150,dim)
 falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
 length(falsos)
 
-resid82B150v<- ldply(resid82B150,as.vector)
+resid82B150v<- ldply(resid82B150[-falsos],as.vector)
 buenos<- complete.cases(resid82B150v)
 length(buenos)
 resid82B150v<- resid82B150v[buenos,]
 resid82B150v<- resid82B150v[1:5000,]
 
+dim8<- ldply(resid82B150,dim)
+falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
+length(falsos)
 
+resid82B150 <- resid82B150[-falsos]
 
 resid82B150v$c11 <- sapply(X = resid82B150v$V1,zsignc)
 resid82B150v$c12 <- sapply(X = resid82B150v$V9,zsignc)
@@ -822,7 +825,12 @@ length(buenos)
 transiz82B200<- transiz82B200[buenos]
 resid82B200<- llply(transiz82B200, function(x) chisq.test(x)$stdres)
 
-#resid82B200 <- resid82B200[-falsos]
+dim8<- ldply(resid82B200,dim)
+falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
+length(falsos)
+
+
+resid82B200 <- resid82B200[-falsos]
 resid82B200v<- ldply(resid82B200,as.vector)
 buenos<- complete.cases(resid82B200v)
 resid82B200v<- resid82B200v[buenos,]
@@ -1100,12 +1108,10 @@ falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
 length(falsos)
 
 
-#resid82C150 <- resid82C150[-falsos]
+resid82C150 <- resid82C150[-falsos]
 resid82C150v<- ldply(resid82C150,as.vector)
 buenos<- complete.cases(resid82C150v)
 length(buenos)
-
-
 resid82C150v<- resid82C150v[buenos,]
 resid82C150v<- resid82C150v[1:5000,]
 
@@ -1233,7 +1239,7 @@ dim8<- ldply(resid82C200,dim)
 falsos<-which(dim8$V1 != 8 | dim8$V2 != 8)
 length(falsos)
 
-#resid82C200 <- resid82C200[-falsos]
+resid82C200 <- resid82C200[-falsos]
 resid82C200v<- ldply(resid82C200,as.vector)
 buenos<- complete.cases(resid82C200v)
 resid82C200v<- resid82C200v[buenos,]
@@ -1342,23 +1348,24 @@ tabla82C200p$N<- rep(200,192)
 
 # Data summary table
 
+
 tabla8B<- rbind(tabla82A100p,tabla82A150p,tabla82A200p,tabla82B100p,tabla82B150p,
                 tabla82B200p, tabla82C100p,tabla82C150p,tabla82C200p)
 
-patron_be<- tabla8B[tabla8B$PATTERN=="BE" & tabla8B$DEPENDENCY== 'Act',]
+
+patron_ab<- tabla8B[tabla8B$PATTERN=="AB" & tabla8B$DEPENDENCY== 'Act',]
+patron_ba<- tabla8B[tabla8B$PATTERN=="BA" & tabla8B$DEPENDENCY== 'Act',]
+
+patron_cd<- tabla8B[tabla8B$PATTERN=="CD" & tabla8B$DEPENDENCY== 'Act',]
 patron_dc<- tabla8B[tabla8B$PATTERN=="DC" & tabla8B$DEPENDENCY== 'Act',]
 
-patron_ca<- tabla8B[tabla8B$PATTERN=="CA" & tabla8B$DEPENDENCY== 'Act',]
-patron_fd<- tabla8B[tabla8B$PATTERN=="FD" & tabla8B$DEPENDENCY== 'Act',]
+patron_ef<- tabla8B[tabla8B$PATTERN=="EF" & tabla8B$DEPENDENCY== 'Act',]
+patron_fe<- tabla8B[tabla8B$PATTERN=="FE" & tabla8B$DEPENDENCY== 'Act',]
 
-patron_eh<- tabla8B[tabla8B$PATTERN=="EH" & tabla8B$DEPENDENCY== 'Act',]
-patron_gb<- tabla8B[tabla8B$PATTERN=="GB" & tabla8B$DEPENDENCY== 'Act',]
-
-tabla_r2_chi<- rbind(patron_be,patron_dc,patron_ca,patron_fd,
-                     patron_eh, patron_gb)
+tabla_r2_chi<- rbind(patron_ab,patron_ba,patron_cd,patron_dc,
+                     patron_ef, patron_fe)
 tabla_r2_chi$MODEL <- gl(1, 54, labels = "GBL")
 tabla_r2_chi$N <- rep(gl(3, 1, labels = c("100","150","200")),18)
 
 end<- Sys.time()
 print(end-start)
-
