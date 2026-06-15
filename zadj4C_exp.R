@@ -244,7 +244,7 @@ tabla4B20p$MATRIX<- rep("B",48)
 tabla4B20p$N<- rep(20,48)
 
 
-tabla4_20p<- rbind(tabla4A20p,tabla4B20p,tabla4B20p)
+tabla4_20p<- rbind(tabla4A20p,tabla4B20p,tabla4C20p)
 
 
 
