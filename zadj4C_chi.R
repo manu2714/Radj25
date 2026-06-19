@@ -357,7 +357,7 @@ zsig4A50<- resid4A50v[,18:33]
 datosLong4A50<-pivot_longer(zsig4A50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4A50$N <- gl(1,80000, labels = "20")
+datosLong4A50$N <- gl(1,80000, labels = "50")
 
 datosLong4A50$CATEGORY<- rep(nombres4,5000)
 
@@ -414,7 +414,7 @@ zsig4B50<- resid4B50v[,18:33]
 datosLong4B50<-pivot_longer(zsig4B50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4B50$N <- gl(1,80000, labels = "20")
+datosLong4B50$N <- gl(1,80000, labels = "50")
 datosLong4B50$CATEGORY<- rep(nombres4,5000)
 
 tabla4B50<-table(datosLong4B50$CATEGORY,datosLong4B50$MEASURE)
@@ -473,7 +473,7 @@ zsig4C50<- resid4C50v[,18:33]
 datosLong4C50<-pivot_longer(zsig4C50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4C50$N <- gl(1,80000, labels = "20")
+datosLong4C50$N <- gl(1,80000, labels = "50")
 datosLong4C50$CATEGORY<- rep(nombres4,5000)
 
 tabla4C50<-table(datosLong4C50$CATEGORY,datosLong4C50$MEASURE)
@@ -498,13 +498,13 @@ length(falsos)
 chisq4A100<- llply(transiz4A100,function(x) chisq.test(x)$statistic)
 chi4A100<- llply(chisq4A100, as.vector)
 chi24A100<- unlist(chi4A100)
-buenos<- which(chi4A100 < qchisq(.95,9))
+buenos<- which(chi4A100 <= qchisq(.95,9))
 length(buenos)
 
 resid4A100<- llply(transiz4A100, function(x) chisq.test(x)$stdres)
 
 resid4A100v<- ldply(resid4A100,as.vector)
-resid4A100v<- resid4A50v[1:5000,]
+resid4A100v<- resid4A100v[1:5000,]
 
 resid4A100v$c11 <- sapply(X = resid4A100v$V1,zsignc)
 resid4A100v$c12 <- sapply(X = resid4A100v$V5,zsignc)
@@ -534,7 +534,7 @@ zsig4A100<- resid4A100v[,18:33]
 datosLong4A100<-pivot_longer(zsig4A100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4A100$N <- gl(1,80000, labels = "20")
+datosLong4A100$N <- gl(1,80000, labels = "100")
 datosLong4A100$CATEGORY<- rep(nombres4,5000)
 
 tabla4A100<-table(datosLong4A100$CATEGORY,datosLong4A100$MEASURE)
@@ -676,7 +676,7 @@ length(falsos)
 chisq4A150<- llply(transiz4A150,function(x) chisq.test(x)$statistic)
 chi4A150<- llply(chisq4A150, as.vector)
 chi24A150<- unlist(chi4A150)
-buenos<- which(chi4A150 < qchisq(.95,9))
+buenos<- which(chi4A150 <= qchisq(.95,9))
 length(buenos)
 
 resid4A150<- llply(transiz4A150, function(x) chisq.test(x)$stdres)
@@ -712,7 +712,7 @@ zsig4A150<- resid4A150v[,18:33]
 datosLong4A150<-pivot_longer(zsig4A150, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4A150$N <- gl(1,80000, labels = "20")
+datosLong4A150$N <- gl(1,80000, labels = "150")
 datosLong4A150$CATEGORY<- rep(nombres4,5000)
 
 tabla4A150<-table(datosLong4A150$CATEGORY,datosLong4A150$MEASURE)
