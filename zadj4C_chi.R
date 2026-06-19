@@ -562,7 +562,7 @@ length(buenos)
 resid4B100<- llply(transiz4B100, function(x) chisq.test(x)$stdres)
 
 resid4B100v<- ldply(resid4B100,as.vector)
-resid4B100v<- resid4B50v[1:5000,]
+resid4B100v<- resid4B100v[1:5000,]
 
 
 
@@ -593,7 +593,7 @@ zsig4B100<- resid4B100v[,18:33]
 
 datosLong4B100<-pivot_longer(zsig4B100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
-datosLong4B100$N <- gl(1,80000, labels = "20")
+datosLong4B100$N <- gl(1,80000, labels = "100")
 datosLong4B100$CATEGORY<- rep(nombres4,5000)
 
 tabla4B100<-table(datosLong4B100$CATEGORY,datosLong4B100$MEASURE)
@@ -620,7 +620,7 @@ length(buenos)
 resid4C100<- llply(transiz4C100, function(x) chisq.test(x)$stdres)
 
 resid4C100v<- ldply(resid4C100,as.vector)
-resid4C100v<- resid4C50v[1:5000,]
+resid4C100v<- resid4C100v[1:5000,]
 
 
 
@@ -651,7 +651,7 @@ zsig4C100<- resid4C100v[,18:33]
 datosLong4C100<-pivot_longer(zsig4C100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4C100$N <- gl(1,80000, labels = "20")
+datosLong4C100$N <- gl(1,80000, labels = "100")
 datosLong4C100$CATEGORY<- rep(nombres4,5000)
 
 tabla4C100<-table(datosLong4C100$CATEGORY,datosLong4C100$MEASURE)
@@ -682,7 +682,7 @@ length(buenos)
 resid4A150<- llply(transiz4A150, function(x) chisq.test(x)$stdres)
 
 resid4A150v<- ldply(resid4A150,as.vector)
-resid4A150v<- resid4A50v[1:5000,]
+resid4A150v<- resid4A150v[1:5000,]
 
 resid4A150v$c11 <- sapply(X = resid4A150v$V1,zsignc)
 resid4A150v$c12 <- sapply(X = resid4A150v$V5,zsignc)
@@ -740,7 +740,7 @@ length(buenos)
 resid4B150<- llply(transiz4B150, function(x) chisq.test(x)$stdres)
 
 resid4B150v<- ldply(resid4B150,as.vector)
-resid4B150v<- resid4B50v[1:5000,]
+resid4B150v<- resid4B150v[1:5000,]
 
 
 
@@ -797,7 +797,7 @@ length(buenos)
 
 resid4C150<- llply(transiz4C150, function(x) chisq.test(x)$stdres)
 resid4C150v<- ldply(resid4C150,as.vector)
-resid4C150v<- resid4C50v[1:5000,]
+resid4C150v<- resid4C150v[1:5000,]
 
 
 
