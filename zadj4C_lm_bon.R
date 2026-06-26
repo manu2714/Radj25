@@ -241,8 +241,7 @@ resid4B20v$c44 <- sapply(X = resid4B20v$V16,zsignc)
 
 zsig4B20<- resid4B20v[,18:33]
 
-datosLong4B20<-pivot_longer(zsig4B20, cols = 1:16,values_to = "MEASURE", 
-                            names_pattern = "(.*)_(.*)",
+datosLong4B20<-pivot_longer(zsig4B20, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
 datosLong4B20$N <- gl(1,80000, labels = "20")
@@ -364,10 +363,11 @@ resid4A50v$c44 <- sapply(X = resid4A50v$V16,zsignc)
 
 zsig4A50<- resid4A50v[,18:33]
 
-datosLong4A50<-pivot_longer(zsig4A50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
+datosLong4A50<-pivot_longer(zsig4A50, cols = 1:16,values_to = "MEASURE", 
+                            names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4A50$N <- gl(1,80000, labels = "20")
+datosLong4A50$N <- gl(1,80000, labels = "50")
 
 datosLong4A50$CATEGORY<- rep(nombres4,5000)
 
@@ -420,10 +420,11 @@ resid4B50v$c44 <- sapply(X = resid4B50v$V16,zsignc)
 
 zsig4B50<- resid4B50v[,18:33]
 
-datosLong4B50<-pivot_longer(zsig4B50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
+datosLong4B50<-pivot_longer(zsig4B50, cols = 1:16,values_to = "MEASURE", 
+                            names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4B50$N <- gl(1,80000, labels = "50")
+datosLong4B50$N <- gl(1,80000, labels = "20")
 datosLong4B50$CATEGORY<- rep(nombres4,5000)
 
 tabla4B50<-table(datosLong4B50$CATEGORY,datosLong4B50$MEASURE)
@@ -479,10 +480,11 @@ resid4C50v$c44 <- sapply(X = resid4C50v$V16,zsignc)
 
 zsig4C50<- resid4C50v[,18:33]
 
-datosLong4C50<-pivot_longer(zsig4C50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
+datosLong4C50<-pivot_longer(zsig4C50, cols = 1:16,values_to = "MEASURE",
+                            names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4C50$N <- gl(1,80000, labels = "50")
+datosLong4C50$N <- gl(1,80000, labels = "20")
 datosLong4C50$CATEGORY<- rep(nombres4,5000)
 
 tabla4C50<-table(datosLong4C50$CATEGORY,datosLong4C50$MEASURE)
@@ -540,7 +542,7 @@ zsig4A100<- resid4A100v[,18:33]
 datosLong4A100<-pivot_longer(zsig4A100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4A100$N <- gl(1,80000, labels = "100")
+datosLong4A100$N <- gl(1,80000, labels = "20")
 datosLong4A100$CATEGORY<- rep(nombres4,5000)
 
 tabla4A100<-table(datosLong4A100$CATEGORY,datosLong4A100$MEASURE)
@@ -597,9 +599,10 @@ resid4B100v$c44 <- sapply(X = resid4B100v$V16,zsignc)
 
 zsig4B100<- resid4B100v[,18:33]
 
-datosLong4B100<-pivot_longer(zsig4B100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
+datosLong4B100<-pivot_longer(zsig4B100, cols = 1:16,values_to = "MEASURE", 
+                             names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
-datosLong4B100$N <- gl(1,80000, labels = "100")
+datosLong4B100$N <- gl(1,80000, labels = "20")
 datosLong4B100$CATEGORY<- rep(nombres4,5000)
 
 tabla4B100<-table(datosLong4B100$CATEGORY,datosLong4B100$MEASURE)
@@ -658,7 +661,7 @@ datosLong4C100<-pivot_longer(zsig4C100, cols = 1:16,values_to = "MEASURE",
                              names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4C100$N <- gl(1,80000, labels = "100")
+datosLong4C100$N <- gl(1,80000, labels = "20")
 datosLong4C100$CATEGORY<- rep(nombres4,5000)
 
 tabla4C100<-table(datosLong4C100$CATEGORY,datosLong4C100$MEASURE)
@@ -715,7 +718,8 @@ resid4A150v$c44 <- sapply(X = resid4A150v$V16,zsignc)
 
 zsig4A150<- resid4A150v[,18:33]
 
-datosLong4A150<-pivot_longer(zsig4A150, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
+datosLong4A150<-pivot_longer(zsig4A150, cols = 1:16,values_to = "MEASURE", 
+                             names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
 datosLong4A150$N <- gl(1,80000, labels = "150")
@@ -832,11 +836,10 @@ resid4C150v$c44 <- sapply(X = resid4C150v$V16,zsignc)
 
 zsig4C150<- resid4C150v[,18:33]
 
-datosLong4C150<-pivot_longer(zsig4C150, cols = 1:16,values_to = "MEASURE", 
-                             names_pattern = "(.*)_(.*)",
+datosLong4C150<-pivot_longer(zsig4C150, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4C150$N <- gl(1,80000, labels = "150")
+datosLong4C150$N <- gl(1,80000, labels = "20")
 datosLong4C150$CATEGORY<- rep(nombres4,5000)
 
 tabla4C150<-table(datosLong4C150$CATEGORY,datosLong4C150$MEASURE)

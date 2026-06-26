@@ -1,4 +1,4 @@
-start <- Sys.time()
+start<- Sys.time()
 
 library(simstudy)
 library(MCTM)
@@ -7,6 +7,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(misty)
+library(MASS)
 
 ## MCTM library is removed from R. 
 ## Formerly available versions can be obtained from the archive.
@@ -22,6 +23,18 @@ transi<- function(x) {
 }
 
 
+## Calculation of residuals
+
+resid_ln<- function(x){
+  RS <- rowSums(x)
+  CS <- colSums(x) 
+  GT <- sum(x)
+  res<- loglm(~1+2,data= x,fitted=T) 
+  num<- (x - res$fitted)
+  den <-  sqrt(res$fitted*((1 - RS / GT) %*% t(1 - CS / GT))) 
+  ASR<- num/den
+  ASR
+}
 
 # Significance of the residuals
 
@@ -41,7 +54,6 @@ zsignc<-function(x){
 
 ## Matrix   A
 
-
 m4A <- matrix(c(1/4, 1/4, 1/4,1/4,
                 1/4, 1/4, 1/4,1/4,
                 1/4, 1/4, 1/4,1/4,
@@ -51,12 +63,12 @@ m4A <- matrix(c(1/4, 1/4, 1/4,1/4,
 
 ## Matrix B p =3/4 states = 4, 1 significant (BC)
 
-
 m4B <- matrix(c(1/4, 1/4, 1/4,1/4,
                 1/12, 1/12, 9/12,1/12,
                 1/4, 1/4, 1/4,1/4,
                 1/4, 1/4, 1/4,1/4), 4, 4, 
               byrow = T)
+
 
 
 ## Matrix C p =3/4 states = 4, 2 significant (BC y DC)
@@ -82,27 +94,28 @@ nombres4<- c("AA","AB","AC","AD",
 
 ## Sequences with 4 states
 
+
 seq4A20 <- genMarkov(n = 25000, transMat = m4A, 
                      chainLen = 20, wide = TRUE)
-seq4B20 <- genMarkov(n = 40000, transMat = m4B, 
+seq4B20 <- genMarkov(n = 45000, transMat = m4B, 
                      chainLen = 20, wide = TRUE)
-seq4C20 <- genMarkov(n = 40000, transMat = m4C, 
+seq4C20 <- genMarkov(n = 45000, transMat = m4C, 
                      chainLen = 20, wide = TRUE)
 
 
-seq4A50 <- genMarkov(n = 20000, transMat = m4A, 
+seq4A50 <- genMarkov(n = 25000, transMat = m4A, 
                      chainLen = 50, wide = TRUE)
-seq4B50 <- genMarkov(n = 20000, transMat = m4B, 
+seq4B50 <- genMarkov(n = 25000, transMat = m4B, 
                      chainLen = 50, wide = TRUE)
-seq4C50 <- genMarkov(n = 20000, transMat = m4C, 
+seq4C50 <- genMarkov(n = 25000, transMat = m4C, 
                      chainLen = 50, wide = TRUE)
 
 
-seq4A100 <- genMarkov(n = 20000, transMat = m4A, 
+seq4A100 <- genMarkov(n = 25000, transMat = m4A, 
                       chainLen = 100, wide = TRUE)
-seq4B100 <- genMarkov(n = 20000, transMat = m4B, 
+seq4B100 <- genMarkov(n = 25000, transMat = m4B, 
                       chainLen = 100, wide = TRUE)
-seq4C100 <- genMarkov(n = 20000, transMat = m4C, 
+seq4C100 <- genMarkov(n = 25000, transMat = m4C, 
                       chainLen = 100, wide = TRUE)
 
 
@@ -130,14 +143,14 @@ falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
 transiz4A20 <- transiz4A20[-falsos]
-chisq4A20<- llply(transiz4A20,function(x) chisq.test(x)$statistic)
+chisq4A20<- llply(transiz4A20,function(x) {loglm(~1+2, data=x)$pearson})
 chi4A20<- llply(chisq4A20, as.vector)
 chi24A20<- unlist(chi4A20)
 buenos<- which(chi4A20 <= qchisq(.95,9))
 
 
 transiz4A20<- transiz4A20[buenos]
-resid4A20<- llply(transiz4A20, function(x) chisq.test(x)$stdres)
+resid4A20<- llply(transiz4A20, function(x) resid_ln(x))
 
 
 resid4A20v<- ldply(resid4A20,as.vector)
@@ -168,8 +181,7 @@ resid4A20v$c44 <- sapply(X = resid4A20v$V16,zsignc)
 
 zsig4A20<- resid4A20v[,18:33]
 
-datosLong4A20<-pivot_longer(zsig4A20, cols = 1:16,values_to = "MEASURE", 
-                            names_pattern = "(.*)_(.*)",
+datosLong4A20<-pivot_longer(zsig4A20, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
 datosLong4A20$N <- gl(1,80000, labels = "20")
@@ -194,14 +206,14 @@ falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
 transiz4B20 <- transiz4B20[-falsos]
-chisq4B20<- llply(transiz4B20,function(x) chisq.test(x)$statistic)
+chisq4B20<- llply(transiz4B20,function(x) {loglm(~1+2, data=x)$pearson})
 chi4B20<- llply(chisq4B20, as.vector)
 chi24B20<- unlist(chi4B20)
 buenos<- which(chi4B20 > qchisq(.95,9))
 
 
 transiz4B20<- transiz4B20[buenos]
-resid4B20<- llply(transiz4B20, function(x) chisq.test(x)$stdres)
+resid4B20<- llply(transiz4B20, function(x) resid_ln(x))
 
 
 resid4B20v<- ldply(resid4B20,as.vector)
@@ -232,8 +244,7 @@ resid4B20v$c44 <- sapply(X = resid4B20v$V16,zsignc)
 
 zsig4B20<- resid4B20v[,18:33]
 
-datosLong4B20<-pivot_longer(zsig4B20, cols = 1:16,values_to = "MEASURE",
-                            names_pattern = "(.*)_(.*)",
+datosLong4B20<-pivot_longer(zsig4B20, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
 datosLong4B20$N <- gl(1,80000, labels = "20")
@@ -257,7 +268,7 @@ falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
 transiz4C20 <- transiz4C20[-falsos]
-chisq4C20<- llply(transiz4C20,function(x) chisq.test(x)$statistic)
+chisq4C20<- llply(transiz4C20,function(x) {loglm(~1+2, data=x)$pearson})
 chi4C20<- llply(chisq4C20, as.vector)
 chi24C20<- unlist(chi4C20)
 buenos<- which(chi4C20 > qchisq(.95,9))
@@ -265,7 +276,7 @@ length(buenos)
 
 
 transiz4C20<- transiz4C20[buenos]
-resid4C20<- llply(transiz4C20, function(x) chisq.test(x)$stdres)
+resid4C20<- llply(transiz4C20, function(x) resid_ln(x))
 
 
 resid4C20v<- ldply(resid4C20,as.vector)
@@ -292,10 +303,11 @@ resid4C20v$c43 <- sapply(X = resid4C20v$V12,zsignc)
 resid4C20v$c44 <- sapply(X = resid4C20v$V16,zsignc)
 
 
+
+
 zsig4C20<- resid4C20v[,18:33]
 
-datosLong4C20<-pivot_longer(zsig4C20, cols = 1:16,values_to = "MEASURE",
-                            names_pattern = "(.*)_(.*)",
+datosLong4C20<-pivot_longer(zsig4C20, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
 datosLong4C20$N <- gl(1,80000, labels = "20")
@@ -319,13 +331,13 @@ dim4<- ldply(transiz4A50,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4A50<- llply(transiz4A50,function(x) chisq.test(x)$statistic)
+chisq4A50<- llply(transiz4A50,function(x) {loglm(~1+2, data=x)$pearson})
 chi4A50<- llply(chisq4A50, as.vector)
 chi24A50<- unlist(chi4A50)
 buenos<- which(chi4A50 <= qchisq(.95,9))
 length(buenos)
 
-resid4A50<- llply(transiz4A50, function(x) chisq.test(x)$stdres)
+resid4A50<- llply(transiz4A50, function(x) resid_ln(x))
 
 resid4A50v<- ldply(resid4A50,as.vector)
 resid4A50v<- resid4A50v[1:5000,]
@@ -355,11 +367,10 @@ resid4A50v$c44 <- sapply(X = resid4A50v$V16,zsignc)
 
 zsig4A50<- resid4A50v[,18:33]
 
-datosLong4A50<-pivot_longer(zsig4A50, cols = 1:16,values_to = "MEASURE",
-                            names_pattern = "(.*)_(.*)",
+datosLong4A50<-pivot_longer(zsig4A50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4A50$N <- gl(1,80000, labels = "50")
+datosLong4A50$N <- gl(1,80000, labels = "20")
 
 datosLong4A50$CATEGORY<- rep(nombres4,5000)
 
@@ -378,13 +389,13 @@ dim4<- ldply(transiz4B50,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4B50<- llply(transiz4B50,function(x) chisq.test(x)$statistic)
+chisq4B50<- llply(transiz4B50,function(x) {loglm(~1+2, data=x)$pearson})
 chi4B50<- llply(chisq4B50, as.vector)
 chi24B50<- unlist(chi4B50)
 buenos<- which(chi4B50 > qchisq(.95,9))
 length(buenos)
 
-resid4B50<- llply(transiz4B50, function(x) chisq.test(x)$stdres)
+resid4B50<- llply(transiz4B50, function(x) resid_ln(x))
 
 resid4B50v<- ldply(resid4B50,as.vector)
 resid4B50v<- resid4B50v[1:5000,]
@@ -413,11 +424,10 @@ resid4B50v$c44 <- sapply(X = resid4B50v$V16,zsignc)
 
 zsig4B50<- resid4B50v[,18:33]
 
-datosLong4B50<-pivot_longer(zsig4B50, cols = 1:16,values_to = "MEASURE", 
-                            names_pattern = "(.*)_(.*)",
+datosLong4B50<-pivot_longer(zsig4B50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4B50$N <- gl(1,80000, labels = "50")
+datosLong4B50$N <- gl(1,80000, labels = "20")
 datosLong4B50$CATEGORY<- rep(nombres4,5000)
 
 tabla4B50<-table(datosLong4B50$CATEGORY,datosLong4B50$MEASURE)
@@ -428,8 +438,6 @@ tabla4B50p$MATRIX<- rep("B",48)
 tabla4B50p$N<- rep(50,48)
 
 
-
-
 # N = 50 Matrix C
 
 transiz4C50<-alply(seq4C50,1,transi)
@@ -438,13 +446,13 @@ falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
 transiz4C50 <- transiz4C50[-falsos]
-chisq4C50<- llply(transiz4C50,function(x) chisq.test(x)$statistic)
+chisq4C50<- llply(transiz4C50,function(x) {loglm(~1+2, data=x)$pearson})
 chi4C50<- llply(chisq4C50, as.vector)
 chi24C50<- unlist(chi4C50)
 buenos<- which(chi4C50 > qchisq(.95,9))
 length(buenos)
 
-resid4C50<- llply(transiz4C50, function(x) chisq.test(x)$stdres)
+resid4C50<- llply(transiz4C50, function(x) resid_ln(x))
 
 resid4C50v<- ldply(resid4C50,as.vector)
 resid4C50v<- resid4C50v[1:5000,]
@@ -473,11 +481,10 @@ resid4C50v$c44 <- sapply(X = resid4C50v$V16,zsignc)
 
 zsig4C50<- resid4C50v[,18:33]
 
-datosLong4C50<-pivot_longer(zsig4C50, cols = 1:16,values_to = "MEASURE",
-                            names_pattern = "(.*)_(.*)",
+datosLong4C50<-pivot_longer(zsig4C50, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                             names_to = c("N", "CATEGORY"))
 
-datosLong4C50$N <- gl(1,80000, labels = "50")
+datosLong4C50$N <- gl(1,80000, labels = "20")
 datosLong4C50$CATEGORY<- rep(nombres4,5000)
 
 tabla4C50<-table(datosLong4C50$CATEGORY,datosLong4C50$MEASURE)
@@ -498,16 +505,16 @@ dim4<- ldply(transiz4A100,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4A100<- llply(transiz4A100,function(x) chisq.test(x)$statistic)
+chisq4A100<- llply(transiz4A100,function(x) {loglm(~1+2, data=x)$pearson})
 chi4A100<- llply(chisq4A100, as.vector)
 chi24A100<- unlist(chi4A100)
-buenos<- which(chi4A100 <= qchisq(.95,9))
+buenos<- which(chi4A100 < qchisq(.95,9))
 length(buenos)
 
-resid4A100<- llply(transiz4A100, function(x) chisq.test(x)$stdres)
+resid4A100<- llply(transiz4A100, function(x) resid_ln(x))
 
 resid4A100v<- ldply(resid4A100,as.vector)
-resid4A100v<- resid4A100v[1:5000,]
+resid4A100v<- resid4A50v[1:5000,]
 
 resid4A100v$c11 <- sapply(X = resid4A100v$V1,zsignc)
 resid4A100v$c12 <- sapply(X = resid4A100v$V5,zsignc)
@@ -534,11 +541,10 @@ resid4A100v$c44 <- sapply(X = resid4A100v$V16,zsignc)
 
 zsig4A100<- resid4A100v[,18:33]
 
-datosLong4A100<-pivot_longer(zsig4A100, cols = 1:16,values_to = "MEASURE", 
-                             names_pattern = "(.*)_(.*)",
+datosLong4A100<-pivot_longer(zsig4A100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4A100$N <- gl(1,80000, labels = "100")
+datosLong4A100$N <- gl(1,80000, labels = "20")
 datosLong4A100$CATEGORY<- rep(nombres4,5000)
 
 tabla4A100<-table(datosLong4A100$CATEGORY,datosLong4A100$MEASURE)
@@ -557,16 +563,15 @@ dim4<- ldply(transiz4B100,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4B100<- llply(transiz4B100,function(x) chisq.test(x)$statistic)
+chisq4B100<- llply(transiz4B100,function(x) {loglm(~1+2, data=x)$pearson})
 chi4B100<- llply(chisq4B100, as.vector)
 chi24B100<- unlist(chi4B100)
 buenos<- which(chi4B100 > qchisq(.95,9))
 length(buenos)
 
-resid4B100<- llply(transiz4B100, function(x) chisq.test(x)$stdres)
-
+resid4B100<- llply(transiz4B100, function(x) resid_ln(x))
 resid4B100v<- ldply(resid4B100,as.vector)
-resid4B100v<- resid4B100v[1:5000,]
+resid4B100v<- resid4B50v[1:5000,]
 
 
 
@@ -595,10 +600,9 @@ resid4B100v$c44 <- sapply(X = resid4B100v$V16,zsignc)
 
 zsig4B100<- resid4B100v[,18:33]
 
-datosLong4B100<-pivot_longer(zsig4B100, cols = 1:16,values_to = "MEASURE",
-                             names_pattern = "(.*)_(.*)",
+datosLong4B100<-pivot_longer(zsig4B100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
-datosLong4B100$N <- gl(1,80000, labels = "100")
+datosLong4B100$N <- gl(1,80000, labels = "20")
 datosLong4B100$CATEGORY<- rep(nombres4,5000)
 
 tabla4B100<-table(datosLong4B100$CATEGORY,datosLong4B100$MEASURE)
@@ -616,16 +620,16 @@ dim4<- ldply(transiz4C100,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4C100<- llply(transiz4C100,function(x) chisq.test(x)$statistic)
+chisq4C100<- llply(transiz4C100,function(x) {loglm(~1+2, data=x)$pearson})
 chi4C100<- llply(chisq4C100, as.vector)
 chi24C100<- unlist(chi4C100)
 buenos<- which(chi4C100 > qchisq(.95,9))
 length(buenos)
 
-resid4C100<- llply(transiz4C100, function(x) chisq.test(x)$stdres)
+resid4C100<- llply(transiz4C100, function(x) resid_ln(x))
 
 resid4C100v<- ldply(resid4C100,as.vector)
-resid4C100v<- resid4C100v[1:5000,]
+resid4C100v<- resid4C50v[1:5000,]
 
 
 
@@ -653,11 +657,10 @@ resid4C100v$c44 <- sapply(X = resid4C100v$V16,zsignc)
 
 zsig4C100<- resid4C100v[,18:33]
 
-datosLong4C100<-pivot_longer(zsig4C100, cols = 1:16,values_to = "MEASURE",
-                             names_pattern = "(.*)_(.*)",
+datosLong4C100<-pivot_longer(zsig4C100, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4C100$N <- gl(1,80000, labels = "100")
+datosLong4C100$N <- gl(1,80000, labels = "20")
 datosLong4C100$CATEGORY<- rep(nombres4,5000)
 
 tabla4C100<-table(datosLong4C100$CATEGORY,datosLong4C100$MEASURE)
@@ -679,16 +682,16 @@ dim4<- ldply(transiz4A150,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4A150<- llply(transiz4A150,function(x) chisq.test(x)$statistic)
+chisq4A150<- llply(transiz4A150,function(x) {loglm(~1+2, data=x)$pearson})
 chi4A150<- llply(chisq4A150, as.vector)
 chi24A150<- unlist(chi4A150)
-buenos<- which(chi4A150 <= qchisq(.95,9))
+buenos<- which(chi4A150 < qchisq(.95,9))
 length(buenos)
 
-resid4A150<- llply(transiz4A150, function(x) chisq.test(x)$stdres)
+resid4A150<- llply(transiz4A150, function(x) resid_ln(x))
 
 resid4A150v<- ldply(resid4A150,as.vector)
-resid4A150v<- resid4A150v[1:5000,]
+resid4A150v<- resid4A50v[1:5000,]
 
 resid4A150v$c11 <- sapply(X = resid4A150v$V1,zsignc)
 resid4A150v$c12 <- sapply(X = resid4A150v$V5,zsignc)
@@ -715,11 +718,10 @@ resid4A150v$c44 <- sapply(X = resid4A150v$V16,zsignc)
 
 zsig4A150<- resid4A150v[,18:33]
 
-datosLong4A150<-pivot_longer(zsig4A150, cols = 1:16,values_to = "MEASURE",
-                             names_pattern = "(.*)_(.*)",
+datosLong4A150<-pivot_longer(zsig4A150, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
-datosLong4A150$N <- gl(1,80000, labels = "150")
+datosLong4A150$N <- gl(1,80000, labels = "20")
 datosLong4A150$CATEGORY<- rep(nombres4,5000)
 
 tabla4A150<-table(datosLong4A150$CATEGORY,datosLong4A150$MEASURE)
@@ -738,16 +740,16 @@ dim4<- ldply(transiz4B150,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4B150<- llply(transiz4B150,function(x) chisq.test(x)$statistic)
+chisq4B150<- llply(transiz4B150,function(x) {loglm(~1+2, data=x)$pearson})
 chi4B150<- llply(chisq4B150, as.vector)
 chi24B150<- unlist(chi4B150)
 buenos<- which(chi4B150 > qchisq(.95,9))
 length(buenos)
 
-resid4B150<- llply(transiz4B150, function(x) chisq.test(x)$stdres)
+resid4B150<- llply(transiz4B150, function(x) resid_ln(x))
 
 resid4B150v<- ldply(resid4B150,as.vector)
-resid4B150v<- resid4B150v[1:5000,]
+resid4B150v<- resid4B50v[1:5000,]
 
 
 
@@ -776,8 +778,7 @@ resid4B150v$c44 <- sapply(X = resid4B150v$V16,zsignc)
 
 zsig4B150<- resid4B150v[,18:33]
 
-datosLong4B150<-pivot_longer(zsig4B150, cols = 1:16,values_to = "MEASURE", 
-                             names_pattern = "(.*)_(.*)",
+datosLong4B150<-pivot_longer(zsig4B150, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 datosLong4B150$N <- gl(1,80000, labels = "20")
 datosLong4B150$CATEGORY<- rep(nombres4,5000)
@@ -797,15 +798,16 @@ dim4<- ldply(transiz4C150,dim)
 falsos<-which(dim4$V1 != 4 | dim4$V2 != 4)
 length(falsos)
 
-chisq4C150<- llply(transiz4C150,function(x) chisq.test(x)$statistic)
+chisq4C150<- llply(transiz4C150,function(x) {loglm(~1+2, data=x)$pearson})
 chi4C150<- llply(chisq4C150, as.vector)
 chi24C150<- unlist(chi4C150)
 buenos<- which(chi4C150 > qchisq(.95,9))
 length(buenos)
 
-resid4C150<- llply(transiz4C150, function(x) chisq.test(x)$stdres)
+resid4C150<- llply(transiz4C150, function(x) resid_ln(x))
+
 resid4C150v<- ldply(resid4C150,as.vector)
-resid4C150v<- resid4C150v[1:5000,]
+resid4C150v<- resid4C50v[1:5000,]
 
 
 
@@ -833,8 +835,7 @@ resid4C150v$c44 <- sapply(X = resid4C150v$V16,zsignc)
 
 zsig4C150<- resid4C150v[,18:33]
 
-datosLong4C150<-pivot_longer(zsig4C150, cols = 1:16,values_to = "MEASURE",
-                             names_pattern = "(.*)_(.*)",
+datosLong4C150<-pivot_longer(zsig4C150, cols = 1:16,values_to = "MEASURE", names_pattern = "(.*)_(.*)",
                              names_to = c("N", "CATEGORY"))
 
 datosLong4C150$N <- gl(1,80000, labels = "20")
@@ -851,53 +852,51 @@ tabla4C150p$N<- rep(150,48)
 tabla4_150p<- rbind(tabla4A150p,tabla4B150p,tabla4C150p)
 
 
-
 #  Data summary table
 
 
-tabla4_chi<- rbind(tabla4_20p,tabla4_50p,tabla4_100p,tabla4_150p)
+tabla4_lm<- rbind(tabla4_20p,tabla4_50p,tabla4_100p,tabla4_150p)
 
 
-write.xlsx(tabla4_chi, "Tabla4C_chi.xlsx")
+tab4bc5<- subset(tabla4_lm,PATTERN == "BC" & DEPENDENCY == "Act" )
+tab4dc5<- subset(tabla4_lm,PATTERN == "DC" & DEPENDENCY == "Act" )
+tab4_act_lm<- rbind(tab4bc5,tab4dc5)
+tab4_act_lm$MODEL<- gl(1,24, labels = "LOGL")
 
-# Activation patterns
+write.xlsx(tab4_act_lm, "Tabla4C_act_lm.xlsx")
 
-tab4bc3<- subset(tabla4_chi,PATTERN == "BC" & DEPENDENCY == "Act" )
-tab4dc3<- subset(tabla4_chi,PATTERN == "DC" & DEPENDENCY == "Act" )
-tab4_act_chi<- rbind(tab4bc3,tab4dc3)
-tab4_act_chi$MODEL<- gl(1,24, labels = "GBL")
-
-write.xlsx(tab4_act_chi, "Tabla4C_act_chi.xlsx")
 
 # Inhibition patterns
 
 
-tab4ba3<- subset(tabla4_chi,PATTERN == "BA" & DEPENDENCY == "Inh" )
-tab4bb3<- subset(tabla4_chi,PATTERN == "BB" & DEPENDENCY == "Inh" )
-tab4bd3<- subset(tabla4_chi,PATTERN == "BD" & DEPENDENCY == "Inh" )
+tab4ba1<- subset(tabla4_lm,PATTERN == "BA" & DEPENDENCY == "Inh" )
+tab4bb1<- subset(tabla4_lm,PATTERN == "BB" & DEPENDENCY == "Inh" )
+tab4bd1<- subset(tabla4_lm,PATTERN == "BD" & DEPENDENCY == "Inh" )
 
 
-tab4da3<- subset(tabla4_chi,PATTERN == "DA" & DEPENDENCY == "Inh" )
-tab4db3<- subset(tabla4_chi,PATTERN == "DB" & DEPENDENCY == "Inh" )
-tab4dd3<- subset(tabla4_chi,PATTERN == "DD" & DEPENDENCY == "Inh" )
+tab4da1<- subset(tabla4_lm,PATTERN == "DA" & DEPENDENCY == "Inh" )
+tab4db1<- subset(tabla4_lm,PATTERN == "DB" & DEPENDENCY == "Inh" )
+tab4dd1<- subset(tabla4_lm,PATTERN == "DD" & DEPENDENCY == "Inh" )
 
 
-tab4_inh_chi<- rbind(tab4ba3, tab4bb3,tab4bd3,
-                     tab4da3,tab4db3,tab4dd3)
-tab4_inh_chi$MODEL<- gl(1,72, labels = "GBL")
+tab4_inh_lm<- rbind(tab4ba1, tab4bb1,tab4bd1, tab4da1,tab4db1,tab4dd1)
+tab4_inh_lm$MODEL<- gl(1,72, labels = "LOGLINEAR")
 
-write.xlsx(tab4_inh_chi, "Tabla4C_inh_chi.xlsx")
+write.xlsx(tab4_inh_lm, "Tabla4C_inh_lm.xlsx")
+
+
 
 # Spurious patterns
 
-tab4ac3<- subset(tabla4_chi,PATTERN == "AC" & DEPENDENCY == "Inh" )
-tab4cc3<- subset(tabla4_chi,PATTERN == "CC" & DEPENDENCY == "Inh" )
+tab4ac1<- subset(tabla4_lm,PATTERN == "AC" & DEPENDENCY == "Inh" )
+tab4cc1<- subset(tabla4_lm,PATTERN == "CC" & DEPENDENCY == "Inh" )
 
-tab4_sp_chi<- rbind(tab4ac3,tab4cc3)
-tab4_sp_chi$MODEL<- gl(1,24, labels = "GBL")
 
-write.xlsx(tab4_inh_chi, "Tabla4C_sp_chi.xlsx")
+tab4_sp_lm<- rbind(tab4ac1, tab4cc1)
+tab4_sp_lm$MODEL<- gl(1,24, labels = "LOGL")
+
+write.xlsx(tab4_sp_lm, "Tabla4C_sp_lm.xlsx")
+
 
 end <- Sys.time()
-print(end- start)
-
+print(end-start)
